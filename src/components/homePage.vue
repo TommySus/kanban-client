@@ -3,70 +3,52 @@
       <div id="home-page">
             <nav class="navbar navbar-light bg-light">
                 <div class="container-fluid">
-                  <img class="navbar-brand" src="https://to-do-cdn.microsoft.com/static-assets/c87265a87f887380a04cf21925a56539b29364b51ae53e089c3ee2b2180148c6/icons/logo.png" width="40" height="40" style="margin-top: 5 px" class="d-inline-block align-top" alt="" loading="lazy">
+                  <div class="row">
+                      <img class="navbar-brand" src="https://www.pinclipart.com/picdir/big/176-1761190_this-is-an-image-of-a-clipboard-report.png" width="40" height="50" style="margin-top: 5 px" class="d-inline-block align-top" alt="" loading="lazy">
+                      <h3 class="mt-2">KanBan</h3>
+                  </div>
                   <div id="greeting">
-    
+                      <h3>hello, {{UserName}}</h3>
                   </div>
                   <button @click="logout" class="btn btn-outline-danger" id="logout-btn">Logout</button>
                 </div>
             </nav>
-            <div class="row" style="margin-left: 60px; margin-top: 30px;">
-                <div>
-                    <div id="header-card">
-                        <h2>Doing</h2>
-                    </div>
-                    <div id="card">
-                        <h4>name</h4>
-                        <p>description</p>
-                    </div>
-                    <div id="card">
-                        <h4>name</h4>
-                        <p>description</p>
-                    </div>
-                </div>
-
-                <div>
-                    <div id="header-card">
-                        <h2>Doing</h2>
-                    </div>
-                    <div id="card">
-                        <h4>name</h4>
-                        <p>description</p>
-                    </div>
-                </div>
-
-                <div>
-                    <div id="header-card">
-                        <h2>Doing</h2>
-                    </div>
-                    <div id="card">
-                        <h4>name</h4>
-                        <p>description</p>
-                    </div>
-                </div>
-
-                <div>
-                    <div id="header-card">
-                        <h2>Doing</h2>
-                    </div>
-                    <div id="card">
-                        <h4>name</h4>
-                        <p>description</p>
-                    </div>
-                </div>
+            <div @click="addTask" class="button-jittery">
+                <button>Add New Task</button>
             </div>
+                <BoardList
+                :Category="Category"
+                :Tasks="Tasks"
+                ></BoardList>
         </div>
   </div>
 </template>
 
 <script>
+import BoardList from './boardList'
+
 export default {
     name: 'homePage',
+    data() {
+        return {
+            UserName: localStorage.getItem('user')
+        }
+    },
+    props: ['fetchTask', 'Tasks', 'Category'],
+    components: {
+        BoardList
+    },
     methods: {
-        logout(){
+        logout() {
             localStorage.clear()
             this.$emit("changePage", "LoginPage")
+        },
+        addTask() {
+            this.$emit("addTask", "AddTaskPage")
         }
+    },
+    created() {
+        this.fetchTask()
     }
 }
 </script>

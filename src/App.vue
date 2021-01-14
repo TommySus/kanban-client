@@ -2,10 +2,16 @@
   <div>
       <AddTaskPage
       v-if="currentPage == 'AddTaskPage'"
+      @addTask="addTask"
+      @changePage="changePage"
       ></AddTaskPage>
       <HomePage
       v-if="currentPage == 'HomePage'"
       @changePage="changePage"
+      @addTask="changePage"
+      :fetchTask="fetchTask"
+      :Tasks="Tasks"
+      :Category="Category"
       ></HomePage>
       <LoginPage
       v-if="currentPage == 'LoginPage'"
@@ -34,7 +40,7 @@ export default {
     data(){
         return {
             Tasks: [],
-            currentPage: "RegisterPage",
+            currentPage: "",
             Category: [
                 {
                     id:1,
@@ -65,6 +71,50 @@ export default {
     methods: {
         changePage(page) {
             this.currentPage = page
+        },
+        fetchTask(){
+            axios({
+                method: "GET",
+                headers: {
+                    access_token: localStorage.getItem('access_token')
+                },
+                url: "http://localhost:3000/tasks"
+            })
+            .then(response => {
+                this.Tasks = response.data
+            })
+            .catch(error => {
+                console.log(error.response)
+            })
+        },
+        addTask(name, description, category) {
+            axios({
+                method: "POST",
+                headers: {
+                    access_token: localStorage.getItem('access_token')
+                },
+                data: {
+                    name: name,
+                    description: description, 
+                    category: category
+                },
+                url: "http://localhost:3000/tasks"
+            })
+            .then(response => {
+                console.log(response.data)
+                this.fetchTask()
+                this.currentPage = 'HomePage'
+            })
+            .catch(error => {
+                console.log(error.response)
+            })
+        }
+    },
+    created() {
+        if(localStorage.getItem('access_token')) {
+            this.currentPage = 'HomePage'
+        } else {
+            this.currentPage = 'LoginPage'
         }
     }
 }

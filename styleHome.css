@@ -3,7 +3,9 @@
     height: 50px;
     margin-bottom: 20px;
     margin-left: 50px;
-    background-color: blue;
+    background: url('./assets/animated-paper-ship.gif');
+    background-size: 150px 80px;
+    opacity: 0.9;
     text-align: center;
     border-radius: 25px;
     box-shadow: 0 40px 40px rgba(0, 0, 0, 0.2);
