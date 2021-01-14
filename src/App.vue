@@ -11,6 +11,7 @@
       @addTask="changePage"
       @deleteTask="deleteTask"
       @editCategory="editCategory"
+      @editTask="editTask"
       :fetchTask="fetchTask"
       :Tasks="Tasks"
       :Category="Category"
@@ -25,6 +26,8 @@
       ></RegisterPage>
       <EditTaskPage
       v-if="currentPage == 'EditTaskPage'"
+      @changePage="changePage"
+      :editData="editData"
       ></EditTaskPage>
   </div>
 </template>
@@ -42,6 +45,7 @@ export default {
     data(){
         return {
             Tasks: [],
+            editData: '' ,
             currentPage: "",
             Category: [
                 {
@@ -138,6 +142,23 @@ export default {
             })
             .then(response => {
                 this.fetchTask()
+            })
+            .catch(error => {
+                console.log(error.response)
+            })
+        },
+        editTask(name, description, category, id) {
+             axios({
+                method: "GET",
+                headers: {
+                    access_token: localStorage.getItem('access_token')
+                },
+                url: "http://localhost:3000/tasks/" + id
+            })
+            .then(response => {
+                this.editData = response.data
+                console.log(this.editData)
+                this.currentPage = "EditTaskPage"
             })
             .catch(error => {
                 console.log(error.response)

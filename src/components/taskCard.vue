@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="card">
-        <button id="edit-btn">&#128393;</button>
+        <button @click="editTask" id="edit-btn">&#128393;</button>
         <h4>{{Task.name}}</h4>
         <p>{{Task.description}}</p>
         <div class="row" id="card-button">
@@ -20,6 +20,9 @@ export default {
     methods: {
       deleteTask() {
         this.$emit("deleteTask", this.Task.id)
+      },
+      editTask() {
+        this.$emit("editTask",this.Task.name, this.Task.description, this.Task.category, this.Task.id)
       },
       next() {
         let changeCategory = ''
@@ -42,7 +45,6 @@ export default {
         }else if(this.Task.category == 'Done'){
             changeCategory = "Doing"
         }
-
         this.$emit("editCategory", changeCategory, this.Task.id)
       }
     }

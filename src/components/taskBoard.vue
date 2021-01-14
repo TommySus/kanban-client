@@ -9,6 +9,7 @@
     :Task="Task"
     @deleteTask="deleteTask"
     @editCategory="editCategory"
+    @editTask="editTask"
     ></TaskCard>
   </div>
 </template>
@@ -28,6 +29,9 @@ export default {
         },
         editCategory(category, id) {
             this.$emit("editCategory", category, id)
+        },
+        editTask(name, description, category, id) {
+            this.$emit("editTask",name, description, category, id)
         }
     },
     computed: {
