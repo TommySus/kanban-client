@@ -1,6 +1,6 @@
 <template>
   <div>
-      <div id="home-page">
+        <div id="home-page">
             <nav class="navbar navbar-light bg-light">
                 <div class="container-fluid">
                   <div class="row">
@@ -15,7 +15,7 @@
             </nav>
             <div @click="addTask" class="button-jittery">
                 <button>Add New Task</button>
-            </div>
+            </div >
                 <BoardList
                 :Category="Category"
                 :Tasks="Tasks"

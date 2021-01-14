@@ -1,6 +1,7 @@
 <template>
   <div>
     <div id="card">
+        <button id="edit-btn">&#128393;</button>
         <h4>{{Task.name}}</h4>
         <p>{{Task.description}}</p>
         <div class="row" id="card-button">
@@ -49,5 +50,20 @@ export default {
 </script>
 
 <style>
-
+  #edit-btn {
+    float: right;
+    position: relative;
+    z-index: 100;
+    margin-bottom: 200px;
+    border-radius: 25px;
+    outline: none;
+    background-color:black;
+    color: white;
+  }
+  #edit-btn:hover {
+    outline: none;
+  }
+  #edit-btn:active {
+    outline: none;
+  }
 </style>

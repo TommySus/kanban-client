@@ -11,6 +11,10 @@
     box-shadow: 0 40px 40px rgba(0, 0, 0, 0.2);
 }
 
+#home-page {
+    margin-bottom: 20px;
+}
+
 #card {
     width: 250px;
     height: 200px;
