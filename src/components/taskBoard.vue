@@ -7,6 +7,8 @@
     v-for="Task in filteredTask"
     :key="Task.id"
     :Task="Task"
+    @deleteTask="deleteTask"
+    @editCategory="editCategory"
     ></TaskCard>
   </div>
 </template>
@@ -19,6 +21,14 @@ export default {
     props: ['Category', 'Tasks'],
     components: {
         TaskCard
+    },
+    methods: {
+        deleteTask(id) {
+            this.$emit("deleteTask", id)
+        },
+        editCategory(category, id) {
+            this.$emit("editCategory", category, id)
+        }
     },
     computed: {
         filteredTask() {

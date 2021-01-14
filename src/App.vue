@@ -9,6 +9,8 @@
       v-if="currentPage == 'HomePage'"
       @changePage="changePage"
       @addTask="changePage"
+      @deleteTask="deleteTask"
+      @editCategory="editCategory"
       :fetchTask="fetchTask"
       :Tasks="Tasks"
       :Category="Category"
@@ -101,9 +103,41 @@ export default {
                 url: "http://localhost:3000/tasks"
             })
             .then(response => {
-                console.log(response.data)
                 this.fetchTask()
                 this.currentPage = 'HomePage'
+            })
+            .catch(error => {
+                console.log(error.response)
+            })
+        },
+        deleteTask(id) {
+            axios({
+                method: "DELETE",
+                headers: {
+                    access_token: localStorage.getItem('access_token')
+                },
+                url: "http://localhost:3000/tasks/" + id
+            })
+            .then(response => {
+                this.fetchTask()
+            })
+            .catch(error => {
+                console.log(error.response)
+            })
+        },
+        editCategory(category, id) {
+            axios({
+                method: "PATCH",
+                headers: {
+                    access_token: localStorage.getItem('access_token')
+                },
+                data: {
+                    category: category
+                },
+                url: "http://localhost:3000/tasks/" + id
+            })
+            .then(response => {
+                this.fetchTask()
             })
             .catch(error => {
                 console.log(error.response)

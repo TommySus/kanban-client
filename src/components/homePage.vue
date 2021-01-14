@@ -19,6 +19,8 @@
                 <BoardList
                 :Category="Category"
                 :Tasks="Tasks"
+                @deleteTask="deleteTask"
+                @editCategory="editCategory"
                 ></BoardList>
         </div>
   </div>
@@ -45,6 +47,12 @@ export default {
         },
         addTask() {
             this.$emit("addTask", "AddTaskPage")
+        },
+        deleteTask(id) {
+            this.$emit("deleteTask", id)
+        },
+        editCategory(category, id) {
+            this.$emit("editCategory", category, id)
         }
     },
     created() {

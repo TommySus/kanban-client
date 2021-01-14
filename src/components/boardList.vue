@@ -6,6 +6,8 @@
                 :key="Category.id"
                 :Category="Category"
                 :Tasks="Tasks"
+                @deleteTask="deleteTask"
+                @editCategory="editCategory"
             ></TaskBoard>
         </div>
     </div>
@@ -19,6 +21,14 @@ export default {
     props: ['Category', 'Tasks'],
     components: {
         TaskBoard
+    },
+    methods: {
+        deleteTask(id) {
+            this.$emit("deleteTask", id)
+        },
+        editCategory(category, id) {
+            this.$emit("editCategory", category, id)
+        }
     }
 }
 </script>
