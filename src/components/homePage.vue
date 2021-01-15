@@ -1,7 +1,7 @@
 <template>
   <div>
         <div id="home-page">
-            <nav class="navbar navbar-light bg-light">
+            <nav class="navbar sticky-top navbar-light bg-light" id="navbar">
                 <div class="container-fluid">
                   <div class="row">
                       <img class="navbar-brand" src="https://www.pinclipart.com/picdir/big/176-1761190_this-is-an-image-of-a-clipboard-report.png" width="40" height="50" style="margin-top: 5 px" class="d-inline-block align-top" alt="" loading="lazy">
@@ -44,6 +44,9 @@ export default {
     methods: {
         logout() {
             localStorage.clear()
+            var auth2 = gapi.auth2.getAuthInstance()
+                auth2.signOut().then(function () {
+            })
             this.$emit("changePage", "LoginPage")
         },
         addTask() {

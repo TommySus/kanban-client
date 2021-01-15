@@ -19,10 +19,15 @@
       <LoginPage
       v-if="currentPage == 'LoginPage'"
       @changePage="changePage"
+      @login="login"
+      :errorMessage="errorMessage"
+      :googleLogin="googleLogin"
       ></LoginPage>
       <RegisterPage
       v-if="currentPage == 'RegisterPage'"
       @changePage="changePage"
+      @register="register"
+      :errorMessage="errorMessage"
       ></RegisterPage>
       <EditTaskPage
       v-if="currentPage == 'EditTaskPage'"
@@ -40,6 +45,7 @@ import HomePage from "./components/homePage"
 import LoginPage from "./components/loginPage"
 import RegisterPage from "./components/registerPage"
 import EditTaskPage from "./components/editTaskPage"
+import Swal from 'sweetalert2'
 
 export default {
     name: "App",
@@ -48,6 +54,7 @@ export default {
             Tasks: [],
             editData: '' ,
             currentPage: "",
+            errorMessage: '',
             Category: [
                 {
                     id:1,
@@ -77,7 +84,83 @@ export default {
     },
     methods: {
         changePage(page) {
+            this.errorMessage = ''
             this.currentPage = page
+        },
+        errorPopUp(error) {
+            return  Swal.fire({
+                        title: error,
+                        icon: 'error',
+                        confirmButtonText: 'back'
+                    })
+        },
+        register(name, email, password){
+            this.errorMessage = ''
+            axios({
+                method: "POST",
+                url: "http://localhost:3000/users/register",
+                data: {
+                    name: name,
+                    email: email,
+                    password: password,
+                }
+            })      
+            .then((response) => {
+                this.errorMessage = ''
+                this.currentPage = 'LoginPage'
+            })
+            .catch(error => {
+                this.errorMessage = error.response.data.message
+            })
+        },
+        login(email, password){
+            axios({
+                method: "POST",
+                url: "http://localhost:3000/users/login",
+                data: {
+                    email: email,
+                    password: password,
+                }
+            })
+            .then((response) => {
+                localStorage.setItem('access_token', response.data.access_token)
+                localStorage.setItem('user', response.data.name)
+                this.errorMessage = ''
+                this.currentPage = "HomePage"
+            })
+            .catch((error) => {
+                this.errorMessage = error.response.data.message
+            })
+        },
+        googleLogin() {
+            this.$gAuth
+            .signIn()
+            .then(GoogleUser => {
+                var id_token = GoogleUser.getAuthResponse().id_token;
+                var userInfo = {
+                    loginType: 'google',
+                    google: GoogleUser
+                }
+                return axios({
+                    method: "POST",
+                    url: "http://localhost:3000/users/googleLogin",
+                    data: {
+                        id_token: id_token
+                    }
+                })
+                .then((response) => {
+                    localStorage.setItem('access_token', response.data.access_token)
+                    localStorage.setItem('user', response.data.name)
+                    this.errorMessage = ''
+                    this.currentPage = "HomePage"
+                })
+                .catch((error) => {
+                    this.errorMessage = error.response.data.message
+                })
+            })
+            .catch(error => {
+                this.errorMessage = error.response.data.message
+            })
         },
         fetchTask(){
             axios({
@@ -91,7 +174,7 @@ export default {
                 this.Tasks = response.data
             })
             .catch(error => {
-                console.log(error.response)
+                this.errorMessage = error.response.data.message
             })
         },
         addTask(name, description, category) {
@@ -109,10 +192,11 @@ export default {
             })
             .then(response => {
                 this.fetchTask()
+                this.errorMessage = ''
                 this.currentPage = 'HomePage'
             })
             .catch(error => {
-                console.log(error.response)
+                this.errorMessage = error.response.data.message
             })
         },
         deleteTask(id) {
@@ -124,10 +208,12 @@ export default {
                 url: "http://localhost:3000/tasks/" + id
             })
             .then(response => {
+                this.errorMessage = ''
                 this.fetchTask()
             })
             .catch(error => {
-                console.log(error.response)
+                this.errorMessage = error.response.data.message
+                this.errorPopUp(this.errorMessage)
             })
         },
         editCategory(category, id) {
@@ -142,10 +228,12 @@ export default {
                 url: "http://localhost:3000/tasks/" + id
             })
             .then(response => {
+                this.errorMessage = ''
                 this.fetchTask()
             })
             .catch(error => {
-                console.log(error.response)
+                this.errorMessage = error.response.data.message
+                this.errorPopUp(this.errorMessage)
             })
         },
         editTask(name, description, category, id) {
@@ -158,11 +246,12 @@ export default {
             })
             .then(response => {
                 this.editData = response.data
-                console.log(this.editData)
+                this.errorMessage = ''
                 this.currentPage = "EditTaskPage"
             })
             .catch(error => {
-                console.log(error.response)
+                this.errorMessage = error.response.data.message
+                this.errorPopUp(this.errorMessage)
             })
         },
         submitEditData(name, description, category, id) {
@@ -179,11 +268,11 @@ export default {
                 url: "http://localhost:3000/tasks/" + id
             })
             .then(response => {
-                console.log(response.data)
+                this.errorMessage = ''
                 this.currentPage = "HomePage"
             })
             .catch(error => {
-                console.log(error.response)
+                this.errorMessage = error.response.data.message
             })
         }
     },

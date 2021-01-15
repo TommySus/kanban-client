@@ -37,28 +37,13 @@ export default {
                 name:"",
                 email:"",
                 password:"" 
-            },
-            errorMessage: ''   
+            }  
         }
     },
+    props: ['errorMessage'],
     methods: {
-        register(){
-            axios({
-                method: "POST",
-                url: "http://localhost:3000/users/register",
-                data: {
-                    name: this.user.name,
-                    email: this.user.email,
-                    password: this.user.password,
-                }
-            })      
-            .then((response) => {
-                console.log(response.data)
-                this.changePage()
-            })
-            .catch(error => {
-                this.errorMessage = error.response.data.message
-            })
+        register() {
+            this.$emit("register", this.user.name, this.user.email, this.user.password)
         },
         changePage(){
             this.$emit("changePage", "LoginPage")

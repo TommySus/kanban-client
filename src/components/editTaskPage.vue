@@ -39,9 +39,6 @@ export default {
         editTask() {
             this.$emit("submitEditTask", this.editName, this.editDescription, this.editCategory, this.editData.id)
         }
-    },
-    created() {
-        
     }
 }
 </script>
