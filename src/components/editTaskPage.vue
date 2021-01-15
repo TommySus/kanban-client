@@ -2,14 +2,12 @@
   <div>
         <div id="edit-task-box">
             <div>
-                <h1 style="margin-left: 13%;">Add New Task</h1>
-                <form @submit.prevent="addTask" class="flex" id="add-task-form">
+                <h1 style="margin-left: 28%;">Edit Task</h1>
+                <form @submit.prevent="editTask" class="flex" id="add-task-form">
                     <input v-model="editName" type="text" name="name" id="name" placeholder="name">
-                    <pre>{{ editData.name }}</pre>
                     <input v-model="editDescription" type="text" name="description" id="description" placeholder="description">
-                    <pre>{{ editData.category }}</pre>
                     <label style="margin-left: 40%" for="category"><b>category</b></label>
-                    <select v-model="category" id="category" name="category">
+                    <select v-model="editCategory" id="category" name="category">
                         <option value="Back-Log">Back-Log</option>
                         <option value="To-Do">To-Do</option>
                         <option value="Doing">Doing</option>
@@ -29,14 +27,17 @@ export default {
     props: ['editData'],
     data() {
         return {
-            editName: '', 
-            editDescription: '',
-            editCategory: ''
+            editName: this.editData.name, 
+            editDescription: this.editData.description,
+            editCategory: this.editData.category
         }
     },
     methods: {
         changePage() {
             this.$emit("changePage", "HomePage")
+        },
+        editTask() {
+            this.$emit("submitEditTask", this.editName, this.editDescription, this.editCategory, this.editData.id)
         }
     },
     created() {

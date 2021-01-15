@@ -27,6 +27,7 @@
       <EditTaskPage
       v-if="currentPage == 'EditTaskPage'"
       @changePage="changePage"
+      @submitEditTask="submitEditData"
       :editData="editData"
       ></EditTaskPage>
   </div>
@@ -148,7 +149,7 @@ export default {
             })
         },
         editTask(name, description, category, id) {
-             axios({
+            axios({
                 method: "GET",
                 headers: {
                     access_token: localStorage.getItem('access_token')
@@ -159,6 +160,27 @@ export default {
                 this.editData = response.data
                 console.log(this.editData)
                 this.currentPage = "EditTaskPage"
+            })
+            .catch(error => {
+                console.log(error.response)
+            })
+        },
+        submitEditData(name, description, category, id) {
+            axios({
+                method: "PUT",
+                headers: {
+                    access_token: localStorage.getItem('access_token')
+                },
+                data: {
+                    name: name,
+                    description: description,
+                    category: category
+                },
+                url: "http://localhost:3000/tasks/" + id
+            })
+            .then(response => {
+                console.log(response.data)
+                this.currentPage = "HomePage"
             })
             .catch(error => {
                 console.log(error.response)
